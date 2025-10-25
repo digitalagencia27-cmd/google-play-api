@@ -11,11 +11,11 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/facundoolano/google-play-api.git"
+    "url": "https://github.com/digitalagencia27-cmd/google-play-api-v3.git"
   },
   "dependencies": {
     "express": "^4.17.1",
-    "google-play-scraper": "github:digitalagencia27-cmd/google-play-scraper"
+    "google-play-scraper": "github:digitalagencia27-cmd/google-play-scraper-v3"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
