@@ -1,20 +1,21 @@
-# Usar uma imagem base oficial do Node.js
+# Imagem base
 FROM node:18
 
-# Definir o diretório de trabalho dentro do container
+# Diretório de trabalho
 WORKDIR /app
 
-# Copiar os arquivos de dependências
+# Copiar arquivos de dependências
 COPY package.json package-lock.json ./
 
-# Instalar as dependências
+# Instalar dependências (inclui git para forks do GitHub)
+RUN apt-get update && apt-get install -y git
 RUN npm install
 
-# Copiar o restante dos arquivos do projeto
+# Copiar o restante do código
 COPY . .
 
-# Expor a porta que a aplicação usa (padrão: 3000, mas verifique no código)
+# Expor a porta
 EXPOSE 3000
 
-# Comando para iniciar a aplicação
+# Comando de start
 CMD ["npm", "start"]
