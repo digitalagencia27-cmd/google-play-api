@@ -1,4 +1,8 @@
-FROM node:18-alpine
+# Etapa 1: Construção
+FROM node:18-alpine AS build
+
+# Instala dependências do sistema necessárias
+RUN apk add --no-cache git bash
 
 WORKDIR /app
 
@@ -6,11 +10,21 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-# Copia o restante do código
+# Copia o restante do código e builda
 COPY . .
+RUN npm run build
 
-# Expõe a porta usada pela API
-EXPOSE 3000
+# Etapa 2: Produção
+FROM node:18-alpine AS production
 
-# Comando de inicialização
-CMD ["npm", "start"]
+WORKDIR /app
+
+# Instala Git (se precisar de subdependências via Git) e Node production dependencies
+RUN apk add --no-cache git bash
+
+COPY --from=build /app /app
+RUN npm install --only=production
+
+EXPOSE 8080
+
+CMD ["node", "server.js"]
