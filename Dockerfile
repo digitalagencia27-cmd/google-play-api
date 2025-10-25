@@ -1,30 +1,20 @@
-# Etapa 1: Construção
-FROM node:18-alpine AS build
+# Usar uma imagem base oficial do Node.js
+FROM node:18
 
-# Instala dependências do sistema necessárias
-RUN apk add --no-cache git bash
-
+# Definir o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copia os arquivos de dependências e instala
-COPY package*.json ./
+# Copiar os arquivos de dependências
+COPY package.json package-lock.json ./
+
+# Instalar as dependências
 RUN npm install
 
-# Copia o restante do código e builda
+# Copiar o restante dos arquivos do projeto
 COPY . .
-RUN npm run build
 
-# Etapa 2: Produção
-FROM node:18-alpine AS production
+# Expor a porta que a aplicação usa (padrão: 3000, mas verifique no código)
+EXPOSE 3000
 
-WORKDIR /app
-
-# Instala Git (se precisar de subdependências via Git) e Node production dependencies
-RUN apk add --no-cache git bash
-
-COPY --from=build /app /app
-RUN npm install --only=production
-
-EXPOSE 8080
-
-CMD ["node", "server.js"]
+# Comando para iniciar a aplicação
+CMD ["npm", "start"]
